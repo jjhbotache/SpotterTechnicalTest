@@ -4,9 +4,20 @@ html,body, #root {
   flex-direction: column;
   margin: 0;
   padding: 0;
+
+
+  font-family: "Open Sans", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
+}
+
+svg{
+  height: 18px;
+  width: 18px;
 }

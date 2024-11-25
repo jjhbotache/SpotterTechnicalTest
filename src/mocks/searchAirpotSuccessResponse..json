@@ -1,0 +1,31 @@
+{
+  "status": true,
+  "timestamp": 1732497294626,
+  "data": [
+    {
+      "skyId": "IBE",
+      "entityId": "128668646",
+      "presentation": {
+        "title": "Ibague",
+        "suggestionTitle": "Ibague (IBE)",
+        "subtitle": "Colombia"
+      },
+      "navigation": {
+        "entityId": "128668646",
+        "entityType": "AIRPORT",
+        "localizedName": "Ibague",
+        "relevantFlightParams": {
+          "skyId": "IBE",
+          "entityId": "128668646",
+          "flightPlaceType": "AIRPORT",
+          "localizedName": "Ibague"
+        },
+        "relevantHotelParams": {
+          "entityId": "27542786",
+          "entityType": "CITY",
+          "localizedName": "Ibague"
+        }
+      }
+    }
+  ]
+}
