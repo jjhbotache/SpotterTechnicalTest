@@ -5,8 +5,9 @@ import Button from '../components/ui/Button'
 import { SearchIcon, ArrowLeftRight } from 'lucide-react'
 import { useState } from 'react'
 import { useFlightSearch } from '../hooks/useFlightSearch'
-import AirportSearchModal from '../components/ui/AirportSearchModal' // Nueva importación
+import AirportSearchModal from '../components/home/AirportSearchModal' // Nueva importación
 import { AirportData } from '../hooks/useFlightSearch'
+import PageLoader from '../components/ui/PageLoader';
 
 
 
@@ -19,6 +20,7 @@ export default function Home() {
   const [toAirport, setToAirport] = useState<AirportData | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalType, setModalType] = useState<'from' | 'to'>('from')
+  const [loading, setLoading] = useState(false);
 
   const completeEnough = fromAirport && toAirport && departure 
 
@@ -28,7 +30,9 @@ export default function Home() {
 
   const handleExplore = () => {
     if (!completeEnough) return
+    setLoading(true)
     searchFlights(fromAirport, toAirport, departure, returnDate)
+      .finally(() => setLoading(false)) 
   }
 
   const handleInputClick = (type: 'from' | 'to') => {
@@ -45,59 +49,66 @@ export default function Home() {
     setIsModalOpen(false)
   }
 
+
   return (
     <HomeContainer>
-      <img src={landingSvg} alt="landscape" />
-      <h1 className="home__title">Flights</h1>
+      {loading ? (
+        <PageLoader />
+      ) : (
+        <>
+          <img src={landingSvg} alt="landscape" />
+          <h1 className="home__title">Flights</h1>
 
-      <div className="search-section">
+          <div className="search-section">
 
 
-        <div className="search-section__inputs">
-          <input
-            type='text'
-            readOnly
-            className="search-section__location-input"
-            placeholder="Where from?"
-            value={fromAirport ? fromAirport.presentation.suggestionTitle : ''}
-            onClick={() => handleInputClick('from')}
-          />
-          <div className='search-section__switch-icon'>
-            <ArrowLeftRight />
+            <div className="search-section__inputs">
+              <input
+                type='text'
+                readOnly
+                className="search-section__location-input"
+                placeholder="Where from?"
+                value={fromAirport ? fromAirport.presentation.suggestionTitle : ''}
+                onClick={() => handleInputClick('from')}
+              />
+              <div className='search-section__switch-icon'>
+                <ArrowLeftRight />
+              </div>
+              <input
+                type='text'
+                readOnly
+                className="search-section__location-input"
+                placeholder="Where to?"
+                value={toAirport ? toAirport.presentation.suggestionTitle : ''}
+                onClick={() => handleInputClick('to')}
+              />
+            </div>
+            <div className="search-section__date-inputs">
+              <label>
+                Departure
+                <input type="date" className="search-section__date-input" value={departure} onChange={(e) => setDeparture(e.target.value)} />
+              </label>
+              <label>
+                Return
+                <input type="date" className="search-section__date-input" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
+              </label>
+            </div>
+            <Button
+              variation={completeEnough ? "primary" : "secondary"}
+              className="search-section__explore-button"
+              onClick={handleExplore}
+            >
+              <SearchIcon />
+              Explore
+            </Button>
           </div>
-          <input
-            type='text'
-            readOnly
-            className="search-section__location-input"
-            placeholder="Where to?"
-            value={toAirport ? toAirport.presentation.suggestionTitle : ''}
-            onClick={() => handleInputClick('to')}
-          />
-        </div>
-        <div className="search-section__date-inputs">
-          <label>
-            Departure
-            <input type="date" className="search-section__date-input" value={departure} onChange={(e) => setDeparture(e.target.value)} />
-          </label>
-          <label>
-            Return
-            <input type="date" className="search-section__date-input" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
-          </label>
-        </div>
-        <Button
-          variation={completeEnough ? "primary" : "secondary"}
-          className="search-section__explore-button"
-          onClick={handleExplore}
-        >
-          <SearchIcon />
-          Explore
-        </Button>
-      </div>
-      {isModalOpen && (
-        <AirportSearchModal
-          onSelect={handleAirportSelect}
-          onClose={() => setIsModalOpen(false)}
-        />
+          {isModalOpen && (
+            <AirportSearchModal
+              onSelect={handleAirportSelect}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )}
+        </>
       )}
     </HomeContainer>
   )

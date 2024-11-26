@@ -1,13 +1,15 @@
 import { useFlightSearch } from '../../hooks/useFlightSearch'
-import Modal from './Modal'
+import Modal from '../ui/Modal'
 import styled from 'styled-components'
 import { AirportData } from '../../hooks/useFlightSearch'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Loader from '../ui/Loader'
 
 function AirportSearchModal({ onSelect, onClose }: { onSelect: (airport: AirportData) => void, onClose: () => void }) {
   const searchAirports = useCallback(useFlightSearch().searchAirports, [])
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<AirportData[]>([])
+  const [loading, setLoading] = useState(false)
   const debounceTimeout = useRef<null | ReturnType<typeof setTimeout>>(null)
 
   useEffect(() => {
@@ -16,10 +18,13 @@ function AirportSearchModal({ onSelect, onClose }: { onSelect: (airport: Airport
     }
     debounceTimeout.current = setTimeout(() => {
       if (query) {
+        setLoading(true)
         searchAirports(query).then(response => {
           setResults(response.data)
+          setLoading(false)
         }).catch(error => {
           console.error(error)
+          setLoading(false)
         })
       }
     }, 400)
@@ -34,17 +39,23 @@ function AirportSearchModal({ onSelect, onClose }: { onSelect: (airport: Airport
     <Modal onClose={onClose}>
       <StyledInput
         type="text"
-        placeholder="Buscar aeropuertos"
+        placeholder="Search airports"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <StyledList>
-        {results.map((airport) => (
-          <StyledListItem key={airport.navigation.entityId} onClick={() => onSelect(airport)}>
-            {airport.presentation.suggestionTitle}
-          </StyledListItem>
-        ))}
-      </StyledList>
+      {loading ? (
+        <LoaderContainer>
+          <Loader />
+        </LoaderContainer>
+      ) : (
+        <StyledList>
+          {results.map((airport) => (
+            <StyledListItem key={airport.navigation.entityId} onClick={() => onSelect(airport)}>
+              {airport.presentation.suggestionTitle}
+            </StyledListItem>
+          ))}
+        </StyledList>
+      )}
     </Modal>
   )
 }
@@ -70,7 +81,7 @@ const StyledInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.colors.placeholder};
   }
-`;
+`
 
 const StyledList = styled.ul`
   list-style: none;
@@ -93,7 +104,7 @@ const StyledList = styled.ul`
     background: ${({ theme }) => theme.colors.border};
     border-radius: 4px;
   }
-`;
+`
 
 const StyledListItem = styled.li`
   padding: 12px 16px;
@@ -109,6 +120,13 @@ const StyledListItem = styled.li`
     background-color: ${({ theme }) => theme.colors.hoverBackground};
     color: ${({ theme }) => theme.colors.primary};
   }
-`;
+`
+
+const LoaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+`
 
 export default AirportSearchModal

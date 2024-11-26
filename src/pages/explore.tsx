@@ -7,6 +7,7 @@ import useAirportCoordinates from '../hooks/useAirportCoordinates'
 import MapComponent from '../components/explore/MapComponent'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
+import Loader from '../components/ui/Loader'
 
 type Coordinates = {
   lat: number;
@@ -42,26 +43,28 @@ export default function Explore() {
 
   return (
     <StyledExplore>
-      <div className="left-container">
-        <h1 className="explore__title">Explore Flights</h1>
-        <div className="explore-results">
-        {flightResults ? (
-          flightResults.data.itineraries.map(itinerary => (
-            <FlightCard key={itinerary.id} itinerary={itinerary} />
-          ))
-        ) : (
-          <p className="explore__no-results">No se pudieron cargar los resultados de vuelos.</p>
-        )}
-        
-        </div>
-      </div>
-      <div className="right-container">
-        {departureCoordinates && arrivalCoordinates ? (
-            <MapComponent departureCoordinates={departureCoordinates} arrivalCoordinates={arrivalCoordinates} />
-        ) : (
-          <p>No route to display</p>
-        )}
-      </div>
+      <>
+          <div className="left-container">
+            <h1 className="explore__title">Explore Flights</h1>
+            <div className="explore-results">
+            {flightResults ? (
+              flightResults.data.itineraries.map(itinerary => (
+                <FlightCard key={itinerary.id} itinerary={itinerary} />
+              ))
+            ) : (
+              <p className="explore__no-results">No se pudieron cargar los resultados de vuelos.</p>
+            )}
+            
+            </div>
+          </div>
+          <div className="right-container">
+            {departureCoordinates && arrivalCoordinates ? (
+                <MapComponent departureCoordinates={departureCoordinates} arrivalCoordinates={arrivalCoordinates} />
+            ) : (
+              <Loader />
+            )}
+          </div>
+        </>
     </StyledExplore>
   )
 }
@@ -101,43 +104,12 @@ const StyledExplore = styled.div`
       height: 100%;
     }
 
-    .card {
-      background-color: ${({ theme }) => theme.colors.cardBackground || theme.colors.background};
-      border-radius: 8px;
-      padding: 1em;
-      margin-bottom: 1em;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.8);
-      .price {
-        color: ${({ theme }) => theme.colors.primary};
-        margin-bottom: 0.5em;
-      }
-    
-      .info {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5em;
-        color: ${({ theme }) => theme.colors.text};
-        gap: 1em;
-  
-        .from, .to {
-          display: flex;
-          align-items: center;
-          gap: 0.2em;
-        }
-      }
-    
-      .row {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        margin-top: .4em;
-      }
-    }
   }
 
   .right-container {
     flex: 1;
-    background: #000;
+    display: grid;
+    place-items: center;
   }
 
   .explore__no-results {

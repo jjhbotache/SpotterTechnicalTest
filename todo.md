@@ -8,5 +8,8 @@
 
 - ~~add maps in explore page~~
 
-- add loadings
-- fix sidebar bug
+- ~~add loaders~~
+- ~~fix sidebar bug~~
+
+- fix responsive map
+- fix responsive searchbox

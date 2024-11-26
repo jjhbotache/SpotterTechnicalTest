@@ -94,6 +94,7 @@ const StyledNavbar = styled.nav`
   border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
   position: sticky;
   top: 0;
+  z-index: 1000;
 
   .navbar__left {
     display: flex;
@@ -140,7 +141,7 @@ const SideMenu = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  z-index: 9000;
+  z-index: 10000; // Ensure the sidebar is always on top
 
   .close-icon {
     align-self: flex-end;
