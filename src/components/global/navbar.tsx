@@ -88,6 +88,7 @@ const StyledNavbar = styled.nav`
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
   height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
 
   .navbar__left {

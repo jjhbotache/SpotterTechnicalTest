@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setFlightResults } from '../redux/flightSlice'
+import { setFlightResults } from '../redux/slices/flightSlice';
 
 interface RelevantFlightParams {
   skyId: string;
