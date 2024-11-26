@@ -13,6 +13,32 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Define a button configuration array inside the component
+  const buttonConfig = [
+    { label: 'Travel', icon: Luggage, disabled: true },
+    { label: 'Explore', icon: Search, onClick: () => navigate('/explore') },
+    { label: 'Flights', icon: Plane },
+    { label: 'Hotels', icon: Hotel, disabled: true },
+    { label: 'Vacation rentals', icon: Home, disabled: true },
+  ];
+
+  // Define the NavButtons component
+  const NavButtons = () => (
+    <>
+      {buttonConfig.map(({ label, icon: Icon, disabled, onClick }) => (
+        <Button
+          key={label}
+          $variation="secondary"
+          $disabled={disabled}
+          onClick={onClick}
+        >
+          <Icon className="navbar__icon" />
+          {label}
+        </Button>
+      ))}
+    </>
+  );
+
   return (
     <StyledNavbar>
       <div className="navbar__left" >
@@ -21,27 +47,7 @@ export default function Navbar() {
       </div>
       
       <div className="navbar__center">
-        <Button variation="secondary">
-          <Luggage className="navbar__icon" />
-          Travel
-        </Button>
-        <Button variation="secondary" onClick={()=>{ navigate('/explore') }}>
-          <Search className="navbar__icon" />
-          Explore
-        </Button>
-        <Button variation="secondary">
-          <Plane className="navbar__icon" />
-          Flights
-        </Button>
-        
-        <Button variation="secondary">
-          <Hotel className="navbar__icon" />
-          Hotels
-        </Button>
-        <Button variation="secondary">
-          <Home className="navbar__icon" />
-          Vacation rentals
-        </Button>
+        <NavButtons />
       </div>
       <div className="navbar__right">
         {theme === 'light' ? (
@@ -55,26 +61,7 @@ export default function Navbar() {
           <Overlay onClick={() => setIsMenuOpen(false)} />
           <SideMenu>
             <X className="close-icon" onClick={() => setIsMenuOpen(false)} />
-            <Button variation="secondary">
-              <Luggage className="navbar__icon" />
-              Travel
-            </Button>
-            <Button variation="secondary">
-              <Search className="navbar__icon" />
-              Explore
-            </Button>
-            <Button variation="secondary">
-              <Plane className="navbar__icon" />
-              Flights
-            </Button>
-            <Button variation="secondary">
-              <Hotel className="navbar__icon" />
-              Hotels
-            </Button>
-            <Button variation="secondary">
-              <Home className="navbar__icon" />
-              Vacation rentals
-            </Button>
+            <NavButtons />
           </SideMenu>
         </>
       )}

@@ -2,14 +2,14 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { RootState } from '../redux/store'
 import Button from '../components/ui/Button'
-import { SearchIcon, ArrowLeftRight } from 'lucide-react'
+import { SearchIcon, ArrowLeftRight, Gem, User, Baby, PersonStanding } from 'lucide-react'
 import { useState } from 'react'
 import { useFlightSearch } from '../hooks/useFlightSearch'
 import AirportSearchModal from '../components/home/AirportSearchModal' // Nueva importación
 import { AirportData } from '../hooks/useFlightSearch'
 import PageLoader from '../components/ui/PageLoader';
-
-
+import SelectInput from '../components/ui/SelectInput' // New import
+import NumberInput from '../components/ui/NumberInput' // New import
 
 export default function Home() {
   const theme = useSelector((state:RootState) => state.theme)
@@ -21,6 +21,10 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalType, setModalType] = useState<'from' | 'to'>('from')
   const [loading, setLoading] = useState(false);
+  const [cabinClass, setCabinClass] = useState('economy') // New state
+  const [adults, setAdults] = useState(1) // New state
+  const [children, setChildren] = useState(0) // New state
+  const [infants, setInfants] = useState(0) // New state
 
   const completeEnough = fromAirport && toAirport && departure 
 
@@ -31,7 +35,16 @@ export default function Home() {
   const handleExplore = () => {
     if (!completeEnough) return
     setLoading(true)
-    searchFlights(fromAirport, toAirport, departure, returnDate)
+    searchFlights({
+        fromDataItem: fromAirport,
+        toDataItem: toAirport,
+        departureDate: departure,
+        cabinClass,
+        adults,
+        childrens: children, // Pass children
+        infants,
+        returnDate
+      })
       .finally(() => setLoading(false)) 
   }
 
@@ -93,10 +106,60 @@ export default function Home() {
                 <input type="date" className="search-section__date-input" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
               </label>
             </div>
+            <details className="search-section__details">
+              <summary className="search-section__summary">Additional Parameters</summary>
+              <div className="search-section__additional-params">
+                <label>
+                <Gem />
+                Cabin Class
+                <SelectInput
+                  value={cabinClass}
+                  onChange={(e) => setCabinClass(e.target.value)}
+                  options={[
+                  { value: 'economy', label: 'Economy' },
+                  { value: 'premium_economy', label: 'Premium Economy' },
+                  { value: 'business', label: 'Business' },
+                  { value: 'first', label: 'First' },
+                  ]}
+                  className="search-section__select-input"
+                />
+                </label>
+                <label>
+                <User />
+                Adults
+                <NumberInput
+                  value={adults}
+                  onChange={(e) => setAdults(Number(e.target.value))}
+                  min={1}
+                  className="search-section__number-input"
+                />
+                </label>
+                <label>
+                <PersonStanding />
+                Children
+                <NumberInput
+                  value={children}
+                  onChange={(e) => setChildren(Number(e.target.value))}
+                  min={0}
+                  className="search-section__number-input"
+                />
+                </label>
+                <label>
+                <Baby />
+                Infants
+                <NumberInput
+                  value={infants}
+                  onChange={(e) => setInfants(Number(e.target.value))}
+                  min={0}
+                  className="search-section__number-input"
+                />
+                </label>
+              </div>
+            </details>
             <Button
-              variation={completeEnough ? "primary" : "secondary"}
-              className="search-section__explore-button"
+              $variation={completeEnough ? "primary" : "secondary"}
               onClick={handleExplore}
+              className="search-section__explore-button"
             >
               <SearchIcon />
               Explore
@@ -118,7 +181,7 @@ const HomeContainer = styled.div`
   text-align: center;
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
-  height: 100%;
+  flex: 1;
 
   .home__title {
     font-size: 3.5em;
@@ -307,6 +370,47 @@ const HomeContainer = styled.div`
       bottom: 0;
       left: 50%;
       transform: translateX(-50%) translateY(50%);
+    }
+    &__additional-params {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+      justify-items: center;
+
+      & label {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 1em;
+        color: ${({ theme }) => theme.colors.text};
+        gap: 0.5em;
+        width: 48%;
+        max-width: 100px;
+
+        & select,
+        & .search-section__number-input {
+          padding: 0.5em;
+          border: 1px solid ${({ theme }) => theme.colors.border};
+          border-radius: 5px;
+          width: 100%;
+          box-sizing: border-box;
+
+          &:hover {
+            background-color: ${({ theme }) => theme.colors.hoverBackground};
+          }
+        }
+      }
+    }
+    &__details {
+      margin-bottom: 1em;
+    }
+
+    &__summary {
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 0.5em;
     }
   }
 `

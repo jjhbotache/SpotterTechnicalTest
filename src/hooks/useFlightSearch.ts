@@ -42,12 +42,18 @@ export const useFlightSearch = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const searchFlights = async (
+  const searchFlights = async (params: {
     fromDataItem: AirportData,
     toDataItem: AirportData,
     departureDate: string,
-    returnDate: string
-  ) => {
+    cabinClass: string, 
+    adults: number,
+    childrens: number, // New parameter
+    infants: number, // New parameter
+    returnDate?: string, // Make returnDate optional
+  }) => {
+    const { fromDataItem, toDataItem, departureDate, cabinClass, adults, childrens, infants, returnDate } = params;
+    
     const options = {
       method: 'GET',
       headers: {
@@ -56,7 +62,28 @@ export const useFlightSearch = () => {
       }
     }
 
-    const url = `https://sky-scrapper.p.rapidapi.com/api/v2/flights/searchFlightsComplete?originSkyId=${fromDataItem.navigation.relevantFlightParams.skyId}&destinationSkyId=${toDataItem.navigation.relevantFlightParams.skyId}&originEntityId=${fromDataItem.navigation.entityId}&destinationEntityId=${toDataItem.navigation.entityId}&date=${departureDate}&returnDate=${returnDate}&cabinClass=economy&adults=1&sortBy=best&currency=USD&market=en-US&countryCode=US`
+    const baseUrl = `https://sky-scrapper.p.rapidapi.com/api/v2/flights/searchFlightsComplete`
+    const queryParams = new URLSearchParams({
+      originSkyId: fromDataItem.navigation.relevantFlightParams.skyId,
+      destinationSkyId: toDataItem.navigation.relevantFlightParams.skyId,
+      originEntityId: fromDataItem.navigation.entityId,
+      destinationEntityId: toDataItem.navigation.entityId,
+      date: departureDate,
+      cabinClass,
+      adults: adults.toString(),
+      childrens: childrens.toString(),
+      infants: infants.toString(),
+      sortBy: 'best',
+      currency: 'USD',
+      market: 'en-US',
+      countryCode: 'US'
+    });
+
+    if (returnDate) {
+      queryParams.append('returnDate', returnDate);
+    }
+
+    const url = `${baseUrl}?${queryParams.toString()}`
 
     try {
       const response = await fetch(url, options)

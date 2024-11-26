@@ -14,5 +14,6 @@
 - ~~fix responsive map~~
 - ~~fix responsive searchbox~~
 
-- add return date functionality
+- ~~add return date functionality~~
+- ~~work with more parameters~~
 - show that other nav links doesnt work

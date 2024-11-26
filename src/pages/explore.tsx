@@ -15,7 +15,7 @@ type Coordinates = {
 };
 
 export default function Explore() {
-  const { flights:flightResults } = useSelector((state: RootState) => state)
+  const flightResults = useSelector((state: RootState) => state.flights)
   // const flightResults = mock
   const navigate = useNavigate()
   const { getCoordinatesByIATA } = useAirportCoordinates()
@@ -23,24 +23,27 @@ export default function Explore() {
   const [arrivalCoordinates, setArrivalCoordinates] = useState< Coordinates | null >(null);
 
   useEffect(() => {
-    if (flightResults && flightResults.data && flightResults.data.itineraries.length > 0) {
-      const departureIATA = flightResults.data.itineraries[0].legs[0].origin.displayCode;
-      const arrivalIATA = flightResults.data.itineraries[0].legs[0].destination?.displayCode;
+    if (flightResults && flightResults.data) {
+      if (flightResults.data.itineraries.length > 0) {
+        const departureIATA = flightResults.data.itineraries[0].legs[0].origin.displayCode;
+        const arrivalIATA = flightResults.data.itineraries[0].legs[0].destination?.displayCode;
 
-      if (!departureIATA || !arrivalIATA) return;
-      const fromCoords = getCoordinatesByIATA(departureIATA)
-      const toCoords = getCoordinatesByIATA(arrivalIATA)
-      if (fromCoords) setDepartureCoordinates(fromCoords);
-      if (toCoords) setArrivalCoordinates(toCoords);
+        if (!departureIATA || !arrivalIATA) return;
+        const fromCoords = getCoordinatesByIATA(departureIATA)
+        const toCoords = getCoordinatesByIATA(arrivalIATA)
+        if (fromCoords) setDepartureCoordinates(fromCoords);
+        if (toCoords) setArrivalCoordinates(toCoords);
+      } else {
+        alert("No se encontraron vuelos.");
+        navigate("/");
+      }
     }
-  }, [flightResults, getCoordinatesByIATA]);
+  }, [flightResults, getCoordinatesByIATA, navigate]);
 
   useEffect(() => {
     if(!flightResults.status)navigate("/")
   }, [flightResults, navigate]);
 
-  console.log("Departure: ", departureCoordinates);
-  console.log("Arrival: ", arrivalCoordinates);
 
   return (
     <StyledExplore className="explore">

@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
 
-interface ButtonProps {
-  variation: 'primary' | 'secondary' | 'outline' | 'ghost';
-  onClick?: () => void;
-  children: React.ReactNode;
+interface ButtonProps  {
+  $variation: 'primary' | 'secondary' | 'outline' | 'ghost';
+  $disabled?: boolean;
 }
 
 const primaryStyle = css`
@@ -33,10 +32,15 @@ const ghostStyle = css`
   color: ${({ theme }) => theme.colors.primary};
 `;
 
+const disabledStyle = css`
+  opacity: 0.7;
+  cursor: not-allowed;
+`;
+
 const Button = styled.button<ButtonProps>`
   border: none;
 
-  ${({ variation }) => {
+  ${({ $variation: variation }) => {
     switch (variation) {
       case 'primary':
         return primaryStyle;
@@ -57,10 +61,11 @@ const Button = styled.button<ButtonProps>`
   align-items: center;
   gap: 8px;
 
-
   &:hover {
     opacity: 0.8;
   }
+
+  ${({ $disabled: disabled }) => disabled && disabledStyle};
 `;
 
 export default Button;
