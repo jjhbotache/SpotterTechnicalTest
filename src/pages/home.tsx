@@ -127,6 +127,7 @@ const HomeContainer = styled.div`
     max-width: 760px;
     box-sizing: border-box;
     margin: auto;
+    margin-bottom: 5em;
 
     &__filters {
       display: flex;

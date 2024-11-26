@@ -84,20 +84,54 @@ export interface FlightResults {
   data: Data
 }
 
-interface FlightState {
-  results: FlightResults | null
-}
 
-const initialState: FlightState = {
-  results: null,
+const initialState: FlightResults = {
+  status: false,
+  timestamp: 0,
+  sessionId: '',
+  data: {
+    context: {
+      status: '',
+      sessionId: '',
+      totalResults: 0
+    },
+    itineraries: [],
+    messages: [],
+    filterStats: {
+      duration: {
+        min: 0,
+        max: 0,
+        multiCityMin: 0,
+        multiCityMax: 0
+      },
+      airports: [],
+      carriers: [],
+      stopPrices: {
+        direct: {
+          isPresent: false,
+          formattedPrice: ''
+        },
+        one: {
+          isPresent: false,
+          formattedPrice: ''
+        },
+        twoOrMore: {
+          isPresent: false,
+          formattedPrice: ''
+        }
+      }
+    },
+    flightsSessionId: '',
+    destinationImageUrl: ''
+  }
 }
 
 const flightSlice = createSlice({
   name: 'flights',
   initialState,
   reducers: {
-    setFlightResults(state, action: PayloadAction<FlightResults>) {
-      state.results = action.payload
+    setFlightResults(_, action: PayloadAction<FlightResults>) {
+      return action.payload
     },
   },
 })

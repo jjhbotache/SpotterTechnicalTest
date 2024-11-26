@@ -5,17 +5,19 @@ import { Menu, Sun, Moon, Plane, Search, Hotel, Home, Luggage, X } from "lucide-
 import { RootState } from "../../redux/store";
 import Button from '../ui/Button';
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const theme = useSelector((state:RootState) => state.theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <StyledNavbar>
-      <div className="navbar__left">
+      <div className="navbar__left" >
         <Menu className="navbar__icon" onClick={() => setIsMenuOpen(!isMenuOpen)} />
-        <h1 className="navbar__title">Google</h1>
+        <h1 className="navbar__title" onClick={()=>{navigate("/")}}>Google</h1>
       </div>
       
       <div className="navbar__center">
@@ -23,7 +25,7 @@ export default function Navbar() {
           <Luggage className="navbar__icon" />
           Travel
         </Button>
-        <Button variation="secondary">
+        <Button variation="secondary" onClick={()=>{ navigate('/explore') }}>
           <Search className="navbar__icon" />
           Explore
         </Button>
@@ -90,11 +92,14 @@ const StyledNavbar = styled.nav`
   height: 60px;
   min-height: 60px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
+  position: sticky;
+  top: 0;
 
   .navbar__left {
     display: flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
 
     .navbar__title {
       font-size: 20px;
@@ -135,7 +140,7 @@ const SideMenu = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  z-index: 1000;
+  z-index: 9000;
 
   .close-icon {
     align-self: flex-end;
@@ -150,5 +155,5 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 9999;
 `;
