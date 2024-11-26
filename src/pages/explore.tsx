@@ -16,6 +16,7 @@ type Coordinates = {
 
 export default function Explore() {
   const { flights:flightResults } = useSelector((state: RootState) => state)
+  // const flightResults = mock
   const navigate = useNavigate()
   const { getCoordinatesByIATA } = useAirportCoordinates()
   const [departureCoordinates, setDepartureCoordinates] = useState< Coordinates | null >(null);
@@ -42,10 +43,9 @@ export default function Explore() {
   console.log("Arrival: ", arrivalCoordinates);
 
   return (
-    <StyledExplore>
-      <>
+    <StyledExplore className="explore">
           <div className="left-container">
-            <h1 className="explore__title">Explore Flights</h1>
+            <h1 className="explore-title">Explore Flights</h1>
             <div className="explore-results">
             {flightResults ? (
               flightResults.data.itineraries.map(itinerary => (
@@ -64,7 +64,6 @@ export default function Explore() {
               <Loader />
             )}
           </div>
-        </>
     </StyledExplore>
   )
 }
@@ -81,22 +80,22 @@ const StyledExplore = styled.div`
   height: calc(100% - 75px);
   
 
-  h1 {
-    margin-bottom: .1em;
-  }
-
-  .explore {
-    &__title {
-      margin-bottom: .1em;
-    }
-  }
-
+  
+  
+  
   .left-container {
-    max-width: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    width: 30%;
+
     height: 100%;
+    h1 {
+      margin-bottom: .1em;
+    }
+    .explore-title {
+      margin-bottom: .1em;
+    }
 
     .explore-results {
       gap: 1em;
@@ -114,5 +113,40 @@ const StyledExplore = styled.div`
 
   .explore__no-results {
     text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+
+    .left-container {
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+      z-index: 2;
+      
+      /* Mobile devices (no hover) */
+      @media (hover: none) {
+        opacity: 0.8;
+      }
+
+      /* Non-mobile devices (with hover) */
+      @media (hover: hover) {
+        opacity: 0.5;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    .right-container {
+      opacity: 0.4;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
   }
 `

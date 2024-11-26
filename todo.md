@@ -11,5 +11,8 @@
 - ~~add loaders~~
 - ~~fix sidebar bug~~
 
-- fix responsive map
-- fix responsive searchbox
+- ~~fix responsive map~~
+- ~~fix responsive searchbox~~
+
+- add return date functionality
+- show that other nav links doesnt work

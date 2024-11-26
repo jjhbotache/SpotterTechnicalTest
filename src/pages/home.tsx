@@ -51,7 +51,7 @@ export default function Home() {
 
 
   return (
-    <HomeContainer>
+    <HomeContainer className='home'>
       {loading ? (
         <PageLoader />
       ) : (
@@ -167,6 +167,7 @@ const HomeContainer = styled.div`
       justify-content: center;
       gap: 0.5em;
       margin-bottom: 1em;
+      
 
       & .search-section__location-input {
         font-size: 20px;
@@ -175,6 +176,8 @@ const HomeContainer = styled.div`
         padding: 0.5em 1em;
         border-radius: 5px;
         border: 1px solid ${({ theme }) => theme.colors.border};
+        width: 40%;
+        max-width: 200px;
 
         &:hover {
           background-color: ${({ theme }) => theme.colors.hoverBackground};
@@ -229,26 +232,44 @@ const HomeContainer = styled.div`
     &__date-inputs {
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 1em;
       margin-bottom: 1em;
+      width: 100%;
 
-      &__date-input {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        padding: 0.5em;
-        border: 1px solid ${({ theme }) => theme.colors.border};
-        border-radius: 5px;
-        cursor: pointer;
+      & label{
+        width: 48%;
+        max-width: 400px;
+        min-width: 200px;
 
-        &:hover {
-          background-color: ${({ theme }) => theme.colors.hoverBackground};
-        }
-
-        span {
-          color: ${({ theme }) => theme.colors.placeholder};
+        &__date-input {
+          padding: 0.5em;
+          border: 1px solid ${({ theme }) => theme.colors.border};
+          border-radius: 5px;
+          width: 100%;
+          box-sizing: border-box;          
+          cursor: pointer;
+  
+          &:hover {
+            background-color: ${({ theme }) => theme.colors.hoverBackground};
+          }
+  
+          span {
+            color: ${({ theme }) => theme.colors.placeholder};
+          }
         }
       }
+
+      @media screen and (width > 480px){        
+        & label:first-child{
+          display: flex;
+          text-align: right;
+          align-items: end;
+        }
+      }
+
+      
+
 
       & .search-section__date-input {
         font-size: 20px;
