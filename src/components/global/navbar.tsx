@@ -17,7 +17,7 @@ export default function Navbar() {
   const buttonConfig = [
     { label: 'Travel', icon: Luggage, disabled: true },
     { label: 'Explore', icon: Search, onClick: () => navigate('/explore') },
-    { label: 'Flights', icon: Plane },
+    { label: 'Flights', icon: Plane, onClick: () => navigate('/') },
     { label: 'Hotels', icon: Hotel, disabled: true },
     { label: 'Vacation rentals', icon: Home, disabled: true },
   ];

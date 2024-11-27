@@ -16,4 +16,4 @@
 
 - ~~add return date functionality~~
 - ~~work with more parameters~~
-- show that other nav links doesnt work
+- ~~show that other nav links doesnt work~~

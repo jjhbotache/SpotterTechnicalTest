@@ -6,7 +6,7 @@ import { theme } from './styles'
 import router from './router'
 
 function App() {
-  const currentTheme = useSelector((state: RootState) => state.theme)
+  const currentTheme = useSelector((state: RootState) => state.theme) as keyof typeof theme
 
   return (
     <ThemeProvider theme={theme[currentTheme]}>
