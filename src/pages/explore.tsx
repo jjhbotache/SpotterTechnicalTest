@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 // import mock from "../mocks/searchFligthsSuccessResponse.json"
-import FlightCard from './components/FlightCard'
+import FlightCard from '../components/explore/FlightCard'
 import useAirportCoordinates from '../hooks/useAirportCoordinates'
 import MapComponent from '../components/explore/MapComponent'
 import { useSelector } from 'react-redux'
